@@ -863,7 +863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListElementPrefab: {fileID: 5499671392343195361, guid: b62a1ff1cfe4c485fbe30aaff0000590, type: 3}
-  ScrollContainer: {fileID: 231726536}
+  ScrollContent: {fileID: 1057233596}
   BottomBar: {fileID: 152352060}
 --- !u!4 &623168333
 Transform:
@@ -1178,12 +1178,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1057233591}
-  - component: {fileID: 1057233592}
   - component: {fileID: 1057233595}
+  - component: {fileID: 1057233592}
   - component: {fileID: 1057233594}
   - component: {fileID: 1057233593}
+  - component: {fileID: 1057233596}
   m_Layer: 5
-  m_Name: ScrollRect
+  m_Name: ScrollContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1292,6 +1293,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1057233590}
   m_CullTransparentMesh: 1
+--- !u!114 &1057233596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057233590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3242ff9716b4290927d550a759ce89d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Container: {fileID: 231726536}
 --- !u!1 &1329680195
 GameObject:
   m_ObjectHideFlags: 0

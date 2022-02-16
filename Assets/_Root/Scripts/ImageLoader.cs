@@ -7,7 +7,7 @@ namespace _Root.Scripts
     public class ImageLoader : MonoBehaviour
     {
         public GameObject ListElementPrefab;
-        public Transform ScrollContainer;
+        public ScrollContent ScrollContent;
         public BottomBar BottomBar;
 
         private string _lastFolderHash = "";
@@ -20,6 +20,7 @@ namespace _Root.Scripts
         private void Start()
         {
             RefreshList();
+            ScrollContent.MoveToTop();
             InvokeRepeating(nameof(AutoRefresh), 1f, 1f);
         }
 
@@ -37,18 +38,18 @@ namespace _Root.Scripts
             var info = new DirectoryInfo(FULL_PATH);
             var fileInfos = info.GetFiles(FILE_EXTENSION);
 
-            ScrollContainer.transform.DestroyAllChildren();
+            ScrollContent.ClearContent();
             foreach (var fileInfo in fileInfos)
             {
-                var scrollElement = Instantiate(ListElementPrefab, ScrollContainer);
+                var scrollElement = Instantiate(ListElementPrefab, ScrollContent.Container);
                 var listImage = scrollElement.GetComponent<ListImage>();
 
                 var texture = Resources.Load(FOLDER_PATH + Path.GetFileNameWithoutExtension(fileInfo.Name)) as Texture2D;
                 listImage.UpdateImageData(texture, fileInfo.Name, fileInfo.CreationTime);
             }
+            _lastFolderHash = GetHash();
 
             Debug.Log($"List refreshed, image count: {fileInfos.Length}");
-            _lastFolderHash = GetHash();
         }
 
         private string GetHash()

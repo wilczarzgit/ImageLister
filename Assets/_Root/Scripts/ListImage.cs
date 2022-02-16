@@ -11,14 +11,14 @@ namespace _Root.Scripts
         public TextMeshProUGUI DateLabel;
         public RawImage Image;
 
-        private const string DATE_FORMAT = "MM/dd/yyyy";
-
         public void UpdateImageData(Texture2D texture, string fileName, DateTime fileDate)
         {
+            var timespan = DateTime.Now - fileDate;
+            var timeFromCreation = $"Created {timespan.Days} days {timespan.Hours} hours ago";
+
             Image.texture = texture;
-            //Image.SizeToParent();
             FilenameLabel.text = fileName;
-            DateLabel.text = fileDate.ToString(DATE_FORMAT);
+            DateLabel.text = timeFromCreation;
         }
     }
 }
