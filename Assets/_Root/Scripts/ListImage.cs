@@ -10,14 +10,24 @@ namespace _Root.Scripts
         public TextMeshProUGUI FilenameLabel;
         public TextMeshProUGUI DateLabel;
         public RawImage Image;
+        public Image Background;
 
-        public void UpdateImageData(Texture2D texture, string fileName, DateTime fileDate)
+        private DateTime _creationDate;
+
+        public void UpdateImageData(Texture2D texture, string fileName, DateTime creationDate, bool showBkg)
         {
-            var timespan = DateTime.Now - fileDate;
-            var timeFromCreation = $"Created {timespan.Days} days {timespan.Hours} hours ago";
-
             Image.texture = texture;
+            Image.SizeToParent();
             FilenameLabel.text = fileName;
+            Background.gameObject.SetActive(showBkg);
+            _creationDate = creationDate;
+            RefreshTimespanLabel();
+        }
+
+        public void RefreshTimespanLabel()
+        {
+            var timespan = DateTime.Now - _creationDate;
+            var timeFromCreation = $"Created {timespan.Days} days {timespan.Hours} hours {timespan.Minutes} minutes ago";
             DateLabel.text = timeFromCreation;
         }
     }

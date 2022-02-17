@@ -1,21 +1,17 @@
 using System.IO;
 using System.Text;
+using _Root.ScriptableObjects;
 using UnityEngine;
 
 namespace _Root.Scripts
 {
     public class ImageLoader : MonoBehaviour
     {
-        public GameObject ListElementPrefab;
+        public Settings Settings;
         public ScrollContent ScrollContent;
         public BottomBar BottomBar;
 
         private string _lastFolderHash = "";
-
-        private const string FILE_EXTENSION = "*.png";
-        private const string RESOURCES_PATH = "Assets/Resources/";
-        private const string FOLDER_PATH = "ListImages/";
-        private const string FULL_PATH = RESOURCES_PATH + FOLDER_PATH;
 
         private void Start()
         {
@@ -35,17 +31,27 @@ namespace _Root.Scripts
 
         public void RefreshList()
         {
-            var info = new DirectoryInfo(FULL_PATH);
-            var fileInfos = info.GetFiles(FILE_EXTENSION);
+            var info = new DirectoryInfo(Settings.FolderPath);
+            var fileInfos = info.GetFiles(Settings.FilePattern);
 
             ScrollContent.ClearContent();
-            foreach (var fileInfo in fileInfos)
+            for (var i = 0; i < fileInfos.Length; i++)
             {
-                var scrollElement = Instantiate(ListElementPrefab, ScrollContent.Container);
-                var listImage = scrollElement.GetComponent<ListImage>();
-
-                var texture = Resources.Load(FOLDER_PATH + Path.GetFileNameWithoutExtension(fileInfo.Name)) as Texture2D;
-                listImage.UpdateImageData(texture, fileInfo.Name, fileInfo.CreationTime);
+                var fileInfo = fileInfos[i];
+                var byteArray = File.ReadAllBytes(fileInfo.FullName);
+                var texture = new Texture2D(2,2);
+                var textureLoaded = texture.LoadImage(byteArray);
+                if (textureLoaded)
+                {
+                    var scrollElement = Instantiate(Settings.ListElementPrefab, ScrollContent.Container);
+                    var listImage = scrollElement.GetComponent<ListImage>();
+                    listImage.UpdateImageData(texture, fileInfo.Name, fileInfo.CreationTime, i % 2 == 0);
+                    ScrollContent.AddListImage(listImage);
+                }
+                else
+                {
+                    Debug.LogError($"Unable to load file {fileInfo.Name}");
+                }
             }
             _lastFolderHash = GetHash();
 
@@ -55,8 +61,8 @@ namespace _Root.Scripts
         private string GetHash()
         {
             var hash = new StringBuilder();
-            var info = new DirectoryInfo(FULL_PATH);
-            var files = info.GetFiles(FILE_EXTENSION);
+            var info = new DirectoryInfo(Settings.FolderPath);
+            var files = info.GetFiles(Settings.FilePattern);
 
             foreach (var fileInfo in files)
             {
