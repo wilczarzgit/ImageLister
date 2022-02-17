@@ -23,7 +23,7 @@ namespace _Root.Scripts
         private void AutoRefresh()
         {
             var hash = GetHash();
-            if (BottomBar.AutoRefreshToggle.isOn && !hash.Equals(_lastFolderHash))
+            if (BottomBar.AutoRefreshToggle.isOn && !hash.Equals("") && !hash.Equals(_lastFolderHash))
             {
                 RefreshList();
             }
@@ -31,8 +31,13 @@ namespace _Root.Scripts
 
         public void RefreshList()
         {
-            var info = new DirectoryInfo(Settings.FolderPath);
-            var fileInfos = info.GetFiles(Settings.FilePattern);
+            var dirInfo = new DirectoryInfo(Settings.FolderPath);
+            if (!dirInfo.Exists)
+            {
+                Debug.LogError($"Could not find the folder {Settings.FolderPath}. Please check your path at Assets/_Root/ScriptableObjects/SettingsObj");
+                return;
+            }
+            var fileInfos = dirInfo.GetFiles(Settings.FilePattern);
 
             ScrollContent.ClearContent();
             for (var i = 0; i < fileInfos.Length; i++)
@@ -61,8 +66,12 @@ namespace _Root.Scripts
         private string GetHash()
         {
             var hash = new StringBuilder();
-            var info = new DirectoryInfo(Settings.FolderPath);
-            var files = info.GetFiles(Settings.FilePattern);
+            var dirInfo = new DirectoryInfo(Settings.FolderPath);
+            if (!dirInfo.Exists)
+            {
+                return "";
+            }
+            var files = dirInfo.GetFiles(Settings.FilePattern);
 
             foreach (var fileInfo in files)
             {

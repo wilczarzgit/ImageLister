@@ -27,7 +27,7 @@ namespace _Root.Scripts
         public void RefreshTimespanLabel()
         {
             var timespan = DateTime.Now - _creationDate;
-            var timeFromCreation = $"Created {timespan.Days} days {timespan.Hours} hours {timespan.Minutes} minutes ago";
+            var timeFromCreation = $"Time since created: {timespan.Days}d {timespan.Hours}h {timespan.Minutes}min {timespan.Seconds}sec";
             DateLabel.text = timeFromCreation;
         }
     }
